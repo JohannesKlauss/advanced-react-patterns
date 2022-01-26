@@ -2,8 +2,8 @@ import * as React from 'react'
 import {alfredTip} from '@kentcdodds/react-workshop-app/test-utils'
 import {render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import {Toggle} from '../final/07.extra-1'
-// import {Toggle} from '../exercise/07'
+// import {Toggle} from '../final/07.extra-1'
+import {Toggle} from '../exercise/07'
 
 let mockedConsoleError: jest.MockInstance<
   ReturnType<typeof console.error>,

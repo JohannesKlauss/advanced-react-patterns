@@ -19,27 +19,25 @@ function App() {
       id="app-root"
       style={{['--accent-color' as any]: selectedPokemon?.color ?? 'black'}}
     >
-      {/*
-        🐨 make Nav accept a ReactElement prop called "avatar"
-        instead of a User prop called "user"
-      */}
       <Nav avatar={<img src={user.image} alt={`${user.name} profile`} />} />
       <div className="spacer" data-size="lg" />
-      {/* 
-        🐨 make Main accept ReactElement props called "sidebar" and "content"
-        instead of the props it accepts right now.
-      */}
       <Main
-        pokemonList={pokemonList}
-        selectedPokemon={selectedPokemon}
-        setSelectedPokemon={setSelectedPokemon}
+        sidebar={
+          <List
+            listItems={pokemonList.map(pokemon => (
+              <li key={pokemon.id}>
+                <PokemonListItemButton
+                  pokemon={pokemon}
+                  onClick={() => setSelectedPokemon(pokemon)}
+                />
+              </li>
+            ))}
+          />
+        }
+        content={<Details selectedPokemon={selectedPokemon} />}
       />
       <div className="spacer" data-size="lg" />
-      {/*
-        🐨 make Footer accept a String prop called "footerMessage"
-        instead of the User prop called "user"
-      */}
-      <Footer user={user} />
+      <Footer footerMessage={`Don't have a good day–have a great day, ${user.name}`} />
     </div>
   )
 }
@@ -66,45 +64,29 @@ function Nav({avatar}: {avatar: React.ReactElement}) {
 }
 
 function Main({
-  // 🐨 all these props should be removed in favor of the sidebar and content props
-  pokemonList,
-  selectedPokemon,
-  setSelectedPokemon,
+  sidebar,
+  content,
 }: {
-  pokemonList: Array<PokemonData>
-  selectedPokemon: PokemonData | null
-  setSelectedPokemon: (pokemon: PokemonData) => void
+  sidebar: React.ReactElement
+  content?: React.ReactElement
 }) {
   return (
     <main>
-      {/* 🐨 put the sidebar and content props here */}
-      <List pokemonList={pokemonList} setSelectedPokemon={setSelectedPokemon} />
-      <Details selectedPokemon={selectedPokemon} />
+      {sidebar}
+      {content}
     </main>
   )
 }
 
 function List({
-  // 🐨 make this accept an array of ReactElements called "listItems"
-  // and remove the existing props
-  pokemonList,
-  setSelectedPokemon,
+  listItems,
 }: {
-  pokemonList: Array<PokemonData>
-  setSelectedPokemon: (pokemon: PokemonData) => void
+  listItems: Array<React.ReactElement>
 }) {
   return (
     <div className="pokemon-list">
       <ul>
-        {/* 🐨 render the listItems here */}
-        {pokemonList.map(p => (
-          <li key={p.id}>
-            <PokemonListItemButton
-              pokemon={p}
-              onClick={() => setSelectedPokemon(p)}
-            />
-          </li>
-        ))}
+        {listItems}
       </ul>
     </div>
   )
@@ -145,11 +127,10 @@ function Details({selectedPokemon}: {selectedPokemon: PokemonData | null}) {
   )
 }
 
-// 🐨 make this accept a footerMessage string instead of the user
-function Footer({user}: {user: User}) {
+function Footer({footerMessage}: {footerMessage: string}) {
   return (
     <footer>
-      <p>{`Don't have a good day–have a great day, ${user.name}`}</p>
+      <p>{footerMessage}</p>
     </footer>
   )
 }

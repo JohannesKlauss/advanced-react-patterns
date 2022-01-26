@@ -1,7 +1,7 @@
 import {alfredTip} from '@kentcdodds/react-workshop-app/test-utils'
 import {renderHook, act} from '@testing-library/react-hooks'
-import {useToggle} from '../final/05'
-// import {useToggle} from '../exercise/05'
+// import {useToggle} from '../final/05'
+import {useToggle} from '../exercise/05'
 
 test('useToggle still maintains the old API and works', () => {
   const {result} = renderHook(() => useToggle())

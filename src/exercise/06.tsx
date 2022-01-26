@@ -26,13 +26,9 @@ function toggleReducer(state: ToggleState, action: ToggleAction) {
   }
 }
 
-// 🐨 add a new option called `reducer` that defaults to `toggleReducer`
-function useToggle({initialOn = false} = {}) {
+function useToggle({initialOn = false, reducer = toggleReducer} = {}) {
   const {current: initialState} = React.useRef<ToggleState>({on: initialOn})
-  // 🐨 instead of passing `toggleReducer` here, pass the `reducer` that's
-  // provided as an option
-  // ... and that's it! Don't forget to check the 💯 extra credit!
-  const [state, dispatch] = React.useReducer(toggleReducer, initialState)
+  const [state, dispatch] = React.useReducer(reducer, initialState)
   const {on} = state
 
   const toggle = () => dispatch({type: 'toggle'})
@@ -72,15 +68,16 @@ function App() {
   const [timesClicked, setTimesClicked] = React.useState(0)
   const clickedTooMuch = timesClicked >= 4
 
-  // 🐨 create a toggleStateReducer function here that accepts the state and action
-  // It should do almost the same thing the regular reducer does above except
-  // in the 'toggle' action type, it should check whether the toggle has been
-  // clicked too much and if it has then it should just return the state rather
-  // than make a new state object.
+  const toggleStateReducer = (state: ToggleState, action: ToggleAction) => {
+    if (action.type === 'toggle' && clickedTooMuch) {
+      return state
+    }
+
+    return toggleReducer(state, action)
+  }
 
   const {on, getTogglerProps, getResetterProps} = useToggle({
-    // 🐨 Pass your toggleStateReducer as the `reducer` option
-    // 💰 reducer: toggleStateReducer,
+    reducer: toggleStateReducer,
   })
 
   return (

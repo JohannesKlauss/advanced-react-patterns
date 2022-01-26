@@ -3,43 +3,44 @@
 
 import * as React from 'react'
 import {Switch} from '../switch'
+import {useContext} from 'react'
 
-// 🐨 create your ToggleContext context here
-// 📜 https://reactjs.org/docs/context.html#reactcreatecontext
-// 💰 the default value should be `undefined`
-// 🦺 the typing for the context value should be `{on: boolean; toggle: () => void}`
-// but because we must initialize it to `undefined`, you need to union that with `undefined`
+const ToggleContext = React.createContext<{on: boolean, toggle: () => void} | undefined>(undefined)
+
+const useToggle = () => {
+  const value = useContext(ToggleContext)
+
+  if (value === undefined) {
+    throw new Error('useToggle must be used within a ToggleProvider')
+  }
+
+  return {
+    ...value
+  }
+}
 
 function Toggle({children}: {children: React.ReactNode}) {
   const [on, setOn] = React.useState(false)
   const toggle = () => setOn(!on)
 
-  // 💣 remove this and instead return <ToggleContext.Provider> where
-  // the value is an object that has `on` and `toggle` on it. Render children
-  // within the provider.
-  return <>TODO...</>
+  return <ToggleContext.Provider value={{toggle, on}}>{children}</ToggleContext.Provider>
 }
 
 function ToggleOn({children}: {children: React.ReactNode}) {
-  // 🐨 instead of this constant value, we'll need to get that from
-  // React.useContext(ToggleContext)
-  // 📜 https://reactjs.org/docs/hooks-reference.html#usecontext
-  const on = false
+  const {on} = useToggle()
   return <>{on ? children : null}</>
 }
 
 function ToggleOff({children}: {children: React.ReactNode}) {
-  // 🐨 do the same thing to this that you did to the ToggleOn component
-  const on = false
+  const {on} = useToggle()
   return <>{on ? null : children}</>
 }
 
 function ToggleButton(
   props: Omit<React.ComponentProps<typeof Switch>, 'on' | 'onClick'>,
 ) {
-  // 🐨 get `on` and `toggle` from the ToggleContext with `useContext`
-  const on = false
-  const toggle = () => {}
+  const {on, toggle} = useToggle()
+
   return <Switch on={on} onClick={toggle} {...props} />
 }
 

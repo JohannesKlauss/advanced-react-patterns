@@ -1,6 +1,6 @@
 import {renderToggle, screen, userEvent} from '../../test/utils'
-import App, {Toggle} from '../final/07'
-// import App, {Toggle} from '../exercise/07'
+// import App, {Toggle} from '../final/07'
+import App, {Toggle} from '../exercise/07'
 
 test('toggling either toggle toggles both', () => {
   renderToggle(<App />)
